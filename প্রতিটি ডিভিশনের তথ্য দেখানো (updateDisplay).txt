@@ -1,0 +1,6 @@
+﻿function updateDisplay() {
+  const d = divisions[currentDivision];
+  document.getElementById('army').textContent = d.army;
+  document.getElementById('money').textContent = d.money;
+  document.getElementById('food').textContent = d.food;
+}

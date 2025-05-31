@@ -1,0 +1,9 @@
+﻿<input type="text" id="divisionNameInput" placeholder="নতুন নাম লিখুন" />
+<button onclick="renameDivision()">নাম পরিবর্তন</button>
+function renameDivision() {
+  const newName = document.getElementById("divisionNameInput").value;
+  if (newName.trim() !== "") {
+    divisions[currentDivision].name = newName;
+    updateDivisionSlide();
+  }
+}

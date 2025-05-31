@@ -1,0 +1,11 @@
+﻿let divisions = [
+  { name: "ঢাকা", army: 0, money: 1000, food: 100, mp: "" },
+  { name: "চট্টগ্রাম", army: 0, money: 1000, food: 100, mp: "" },
+  { name: "রাজশাহী", army: 0, money: 1000, food: 100, mp: "" },
+  { name: "খুলনা", army: 0, money: 1000, food: 100, mp: "" },
+  { name: "বরিশাল", army: 0, money: 1000, food: 100, mp: "" },
+  { name: "সিলেট", army: 0, money: 1000, food: 100, mp: "" },
+  { name: "রংপুর", army: 0, money: 1000, food: 100, mp: "" }
+];
+let currentDivision = 0;
+let primeMinister = "";

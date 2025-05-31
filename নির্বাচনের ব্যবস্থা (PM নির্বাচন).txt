@@ -1,0 +1,5 @@
+﻿<button onclick="electPrimeMinister()">নির্বাচন করুন</button>
+function electPrimeMinister() {
+  primeMinister = divisions[currentDivision].name;
+  alert(`${primeMinister} থেকে প্রধানমন্ত্রী নির্বাচিত হয়েছেন!`);
+}

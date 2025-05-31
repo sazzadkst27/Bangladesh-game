@@ -1,0 +1,12 @@
+﻿function recruitArmy() {
+  let d = divisions[currentDivision];
+  if (d.money >= 200 && d.food >= 20) {
+    d.army++;
+    d.money -= 200;
+    d.food -= 20;
+    updateDisplay();
+    showPopup('+1 সেনা');
+  } else {
+    alert('টাকা বা খাদ্য নেই!');
+  }
+}
