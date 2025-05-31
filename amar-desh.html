@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>আমার দেশ</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eef7f2;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #2c5f2d;
+    }
+
+    .stat {
+      background-color: #d4f4dd;
+      padding: 15px;
+      margin: 15px auto;
+      width: 300px;
+      border-radius: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #2c5f2d;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #4caf50;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌍 আমার দেশ</h1>
+
+  <div class="stat">
+    <p>💰 বাজেট: <span id="budget">1000</span> কোটি টাকা</p>
+    <p>🌳 পরিবেশ: <span id="environment">50</span>/100</p>
+    <p>🏗️ ভবন সংখ্যা: <span id="buildings">0</span></p>
+  </div>
+
+  <div>
+    <button onclick="plantTree()">🌱 গাছ লাগান (-৫০)</button>
+    <button onclick="buildBuilding()">🏢 ভবন নির্মাণ (-২০০)</button>
+    <button onclick="collectTax()">💼 কর আদায় (+৩০০)</button>
+  </div>
+
+  <p id="message"></p>
+
+  <script>
+    let budget = 1000;
+    let environment = 50;
+    let buildings = 0;
+
+    const budgetEl = document.getElementById("budget");
+    const environmentEl = document.getElementById("environment");
+    const buildingsEl = document.getElementById("buildings");
+    const messageEl = document.getElementById("message");
+
+    function updateUI() {
+      budgetEl.innerText = budget;
+      environmentEl.innerText = environment;
+      buildingsEl.innerText = buildings;
+    }
+
+    function plantTree() {
+      if (budget >= 50) {
+        budget -= 50;
+        environment += 5;
+        if (environment > 100) environment = 100;
+        messageEl.innerText = "🌳 আপনি গাছ লাগালেন!";
+      } else {
+        messageEl.innerText = "❌ পর্যাপ্ত বাজেট নেই!";
+      }
+      updateUI();
+    }
+
+    function buildBuilding() {
+      if (budget >= 200) {
+        budget -= 200;
+        buildings += 1;
+        environment -= 3;
+        messageEl.innerText = "🏗️ ভবন নির্মাণ সম্পন্ন!";
+      } else {
+        messageEl.innerText = "❌ বাজেট যথেষ্ট নয়!";
+      }
+      updateUI();
+    }
+
+    function collectTax() {
+      budget += 300;
+      environment -= 2;
+      messageEl.innerText = "💼 আপনি কর আদায় করলেন।";
+      updateUI();
+    }
+
+    updateUI();
+  </script>
+
+</body>
+</html>
