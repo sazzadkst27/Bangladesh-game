@@ -1,230 +1,117 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>দেশ পরিচালনা গেম (Animated)</title>
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #eef6fb;
-    margin: 0; padding: 0; overflow-x: hidden;
-    text-align: center;
-  }
-  #introScreen {
-    position: fixed;
-    top:0; left:0; width: 100vw; height: 100vh;
-    background: #004466;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-size: 2.5rem;
-    opacity: 1;
-    transition: opacity 1.5s ease;
-    z-index: 9999;
-  }
-  #introScreen.hide {
-    opacity: 0;
-    pointer-events: none;
-  }
-  .popup {
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #27ae60cc;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-weight: bold;
-    animation: popupAnim 1.5s forwards;
-    pointer-events: none;
-  }
-  @keyframes popupAnim {
-    0% { opacity: 1; transform: translate(-50%, 0); }
-    100% { opacity: 0; transform: translate(-50%, -50px); }
-  }
-  .division {
-    width: 90vw;
-    margin: 20px auto;
-    overflow: hidden;
-    position: relative;
-    height: 150px;
-    border: 1px solid #004466;
-    border-radius: 10px;
-  }
-  .division-content {
-    display: flex;
-    transition: transform 0.6s ease;
-    width: 700%;
-  }
-  .division-slide {
-    flex: 0 0 14.28%;
-    padding: 15px;
-    box-sizing: border-box;
-    background: #bbdefb;
-    margin: 5px;
-    border-radius: 10px;
-  }
-  button {
-    margin: 10px 5px;
-    font-size: 16px;
-    padding: 10px 15px;
-    border-radius: 8px;
-    border: none;
-    background: #004466;
-    color: white;
-    cursor: pointer;
-    user-select: none;
-  }
-  button:active {
-    background: #002933;
-  }
-  #attackEffect {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background: #ff000080;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 9998;
-  }
-  #attackEffect.active {
-    opacity: 0.6;
-    pointer-events: all;
-  }
-  .stats {
-    font-size: 18px;
-    margin-top: 10px;
-  }
-</style>
+  <meta charset="UTF-8">
+  <title>আমার দেশ</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eef7f2;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #2c5f2d;
+    }
+
+    .stat {
+      background-color: #d4f4dd;
+      padding: 15px;
+      margin: 15px auto;
+      width: 300px;
+      border-radius: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #2c5f2d;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #4caf50;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
 </head>
 <body>
 
-<div id="introScreen">
-  <div>🇧🇩 দেশ পরিচালনা গেম 🇧🇩</div>
-  <div style="font-size: 1rem; margin-top: 15px;">Loading...</div>
-</div>
+  <h1>🌍 আমার দেশ</h1>
 
-<div class="stats">
-  সেনা: <span id="army">0</span> &nbsp; | &nbsp;
-  টাকা: <span id="money">1000</span> &nbsp; | &nbsp;
-  খাদ্য: <span id="food">100</span>
-</div>
-
-<div>
-  <button onclick="recruitArmy()">সেনা নিয়োগ</button>
-  <button onclick="earnMoney()">ট্যাক্স আয়</button>
-  <button onclick="farm()">চাষাবাদ</button>
-</div>
-
-<div class="division">
-  <div id="divisionContent" class="division-content">
-    <div class="division-slide">ডিভিশন ১</div>
-    <div class="division-slide">ডিভিশন ২</div>
-    <div class="division-slide">ডিভিশন ৩</div>
-    <div class="division-slide">ডিভিশন ৪</div>
-    <div class="division-slide">ডিভিশন ৫</div>
-    <div class="division-slide">ডিভিশন ৬</div>
-    <div class="division-slide">ডিভিশন ৭</div>
+  <div class="stat">
+    <p>💰 বাজেট: <span id="budget">1000</span> কোটি টাকা</p>
+    <p>🌳 পরিবেশ: <span id="environment">50</span>/100</p>
+    <p>🏗️ ভবন সংখ্যা: <span id="buildings">0</span></p>
   </div>
-</div>
 
-<div>
-  <button onclick="prevDivision()">আগের ডিভিশন</button>
-  <button onclick="nextDivision()">পরের ডিভিশন</button>
-</div>
+  <div>
+    <button onclick="plantTree()">🌱 গাছ লাগান (-৫০)</button>
+    <button onclick="buildBuilding()">🏢 ভবন নির্মাণ (-২০০)</button>
+    <button onclick="collectTax()">💼 কর আদায় (+৩০০)</button>
+  </div>
 
-<button style="margin-top:20px; background:#c0392b;" onclick="attack()">আক্রমণ করো</button>
+  <p id="message"></p>
 
-<div id="attackEffect"></div>
+  <script>
+    let budget = 1000;
+    let environment = 50;
+    let buildings = 0;
 
-<script>
-  window.onload = () => {
-    setTimeout(() => {
-      document.getElementById('introScreen').classList.add('hide');
-    }, 2500);
-  }
+    const budgetEl = document.getElementById("budget");
+    const environmentEl = document.getElementById("environment");
+    const buildingsEl = document.getElementById("buildings");
+    const messageEl = document.getElementById("message");
 
-  let army = 0, money = 1000, food = 100;
-  let currentDivision = 0;
-  const totalDivisions = 7;
-
-  function updateDisplay() {
-    document.getElementById('army').textContent = army;
-    document.getElementById('money').textContent = money;
-    document.getElementById('food').textContent = food;
-  }
-
-  function showPopup(text) {
-    const popup = document.createElement('div');
-    popup.className = 'popup';
-    popup.style.bottom = '50px';
-    popup.textContent = text;
-    document.body.appendChild(popup);
-    setTimeout(() => {
-      popup.remove();
-    }, 1500);
-  }
-
-  function recruitArmy() {
-    if(money >= 200 && food >= 20){
-      army++;
-      money -= 200;
-      food -= 20;
-      updateDisplay();
-      showPopup('+1 সেনা নিয়োগ');
-    } else {
-      alert('টাকা বা খাদ্য নেই!');
+    function updateUI() {
+      budgetEl.innerText = budget;
+      environmentEl.innerText = environment;
+      buildingsEl.innerText = buildings;
     }
-  }
 
-  function earnMoney() {
-    money += 150;
-    updateDisplay();
-    showPopup('+৳150 আয়');
-  }
-
-  function farm() {
-    food += 30;
-    updateDisplay();
-    showPopup('+30 খাদ্য উৎপাদন');
-  }
-
-  function updateDivisionSlide() {
-    const divisionContent = document.getElementById('divisionContent');
-    const slideWidthPercent = 100 / totalDivisions;
-    divisionContent.style.transform = `translateX(-${slideWidthPercent * currentDivision}%)`;
-  }
-
-  function nextDivision() {
-    if(currentDivision < totalDivisions - 1){
-      currentDivision++;
-      updateDivisionSlide();
-      showPopup(`ডিভিশন ${currentDivision + 1} এ গেলো`);
+    function plantTree() {
+      if (budget >= 50) {
+        budget -= 50;
+        environment += 5;
+        if (environment > 100) environment = 100;
+        messageEl.innerText = "🌳 আপনি গাছ লাগালেন!";
+      } else {
+        messageEl.innerText = "❌ পর্যাপ্ত বাজেট নেই!";
+      }
+      updateUI();
     }
-  }
 
-  function prevDivision() {
-    if(currentDivision > 0){
-      currentDivision--;
-      updateDivisionSlide();
-      showPopup(`ডিভিশন ${currentDivision + 1} এ গেলো`);
+    function buildBuilding() {
+      if (budget >= 200) {
+        budget -= 200;
+        buildings += 1;
+        environment -= 3;
+        messageEl.innerText = "🏗️ ভবন নির্মাণ সম্পন্ন!";
+      } else {
+        messageEl.innerText = "❌ বাজেট যথেষ্ট নয়!";
+      }
+      updateUI();
     }
-  }
 
-  function attack() {
-    const attackEffect = document.getElementById('attackEffect');
-    attackEffect.classList.add('active');
-    showPopup('আক্রমণ শুরু হয়েছে!');
-    setTimeout(() => {
-      attackEffect.classList.remove('active');
-      showPopup('আক্রমণ শেষ হয়েছে!');
-    }, 1000);
-  }
+    function collectTax() {
+      budget += 300;
+      environment -= 2;
+      messageEl.innerText = "💼 আপনি কর আদায় করলেন।";
+      updateUI();
+    }
 
-  updateDisplay();
-</script>
+    updateUI();
+  </script>
+
 </body>
 </html>
