@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>দেশ পরিচালনা গেম</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body { font-family: sans-serif; background: #eef; padding: 20px; text-align: center; }
+        h1 { color: #004466; }
+        button { font-size: 18px; margin: 10px; padding: 10px 20px; border-radius: 8px; border: none; background: #006699; color: white; }
+        .stats { margin-top: 20px; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <h1>🏛️ দেশ পরিচালনা</h1>
+    <div class="stats">
+        সেনা: <span id="army">0</span><br>
+        টাকা: <span id="money">1000</span><br>
+        খাদ্য: <span id="food">100</span>
+    </div>
+    <div>
+        <button onclick="recruitArmy()">সেনা নিয়োগ</button>
+        <button onclick="earnMoney()">ট্যাক্স আয়</button>
+        <button onclick="farm()">চাষাবাদ</button>
+    </div>
+
+    <script>
+        let army = 0, money = 1000, food = 100;
+
+        function updateDisplay() {
+            document.getElementById("army").textContent = army;
+            document.getElementById("money").textContent = money;
+            document.getElementById("food").textContent = food;
+        }
+
+        function recruitArmy() {
+            if (money >= 200 && food >= 20) {
+                army += 1;
+                money -= 200;
+                food -= 20;
+            } else {
+                alert("টাকা বা খাদ্য নেই!");
+            }
+            updateDisplay();
+        }
+
+        function earnMoney() {
+            money += 150;
+            updateDisplay();
+        }
+
+        function farm() {
+            food += 30;
+            updateDisplay();
+        }
+
+        updateDisplay();
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+
+{
+  "name": "দেশ পরিচালনা গেম",
+  "short_name": "দেশ গেম",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#eef",
+  "theme_color": "#004466",
+  "icons": [{
+    "src": "icon.png",
+    "type": "image/png",
+    "sizes": "192x192"
+  }]
+}
