@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>বাংলাদেশ পরিচালনা গেম - Animation সহ</title>
+<style>
+  body {
+    margin: 0; padding: 0;
+    background: linear-gradient(to top, #87ceeb 0%, #ffffff 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+  }
+  h1 {
+    text-align: center;
+    color: #005d4d;
+    margin-top: 20px;
+  }
+  #game {
+    max-width: 900px;
+    margin: 20px auto;
+    background: #d8f0e6;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 0 10px #4caf5088;
+  }
+  .division {
+    background: white;
+    margin: 15px 0;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 0 8px #aaa;
+    position: relative;
+    overflow: hidden;
+  }
+  .stats p {
+    margin: 5px 0;
+    font-weight: 600;
+  }
+  button {
+    margin: 5px 5px 5px 0;
+    padding: 8px 14px;
+    border-radius: 5px;
+    border: none;
+    background-color: #009688;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #00796b;
+  }
+
+  /* Animation container */
+  .animation-area {
+    position: relative;
+    height: 150px;
+    background: linear-gradient(to top, #7bb661 0%, #a3c280 100%);
+    border-radius: 10px;
+    margin-bottom: 15px;
+    overflow: hidden;
+  }
+
+  /* Tree animation */
+  .tree {
+    position: absolute;
+    bottom: 0;
+    left: 30px;
+    width: 50px;
+    height: 90px;
+    background: linear-gradient(to top, #4a7023 0%, #2a4d0c 100%);
+    border-radius: 20px 20px 0 0;
+    animation: sway 3s ease-in-out infinite;
+    box-shadow: inset 0 10px 15px #8bc34a;
+  }
+  .tree::before {
+    content: '';
+    position: absolute;
+    bottom: 80px;
+    left: -20px;
+    width: 90px;
+    height: 90px;
+    background: radial-gradient(circle, #2e7d32 40%, transparent 70%);
+    border-radius: 50%;
+    animation: sway 3s ease-in-out infinite;
+    animation-delay: 0.5s;
+  }
+
+  @keyframes sway {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(4deg); }
+  }
+
+  /* Road */
+  .road {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    background: repeating-linear-gradient(
+      to right,
+      #666666,
+      #666666 20px,
+      #bbbbbb 20px,
+      #bbbbbb 30px
+    );
+    overflow: hidden;
+  }
+
+  /* Car */
+  .car {
+    position: absolute;
+    bottom: 5px;
+    width: 40px;
+    height: 20px;
+    background: #b71c1c;
+    border-radius: 5px 5px 2px 2px;
+    animation: drive 6s linear infinite;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  }
+  .car::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 5px;
+    width: 10px;
+    height: 10px;
+    background: #ffeb3b;
+    border-radius: 50%;
+    box-shadow: 25px 0 #ffeb3b;
+  }
+  @keyframes drive {
+    0% { left: -50px; }
+    100% { left: 100%; }
+  }
+
+  /* Soldier */
+  .soldier {
+    position: absolute;
+    bottom: 0;
+    left: 200px;
+    width: 30px;
+    height: 70px;
+    background: linear-gradient(to top, #3a3a3a 0%, #6b8e23 100%);
+    border-radius: 10px;
+    box-shadow: inset 0 0 10px #4a6923;
+    animation: march 4s linear infinite;
+  }
+  .soldier::before {
+    content: '';
+    position: absolute;
+    bottom: 65px;
+    left: 5px;
+    width: 20px;
+    height: 20px;
+    background: #d9c6b2;
+    border-radius: 50%;
+    border: 2px solid #554433;
+  }
+  @keyframes march {
+    0% { left: 200px; }
+    50% { left: 220px; }
+    100% { left: 200px; }
+  }
+
+</style>
+</head>
+<body>
+  <h1>বাংলাদেশ পরিচালনা গেম - Animation সহ</h1>
+  <div id="game"></div>
+
+<script>
+  const divisions = ["ঢাকা", "চট্টগ্রাম", "রাজশাহী", "খুলনা", "বরিশাল", "সিলেট", "রংপুর"];
+  const data = {};
+  divisions.forEach(name => {
+    data[name] = {
+      tax: 1000,
+      army: 100,
+      police: 50,
+      farming: 500,
+      buildings: 2
+    };
+  });
+  const container = document.getElementById("game");
+  function render() {
+    container.innerHTML = '';
+    for (let div in data) {
+      const d = data[div];
+      container.innerHTML += `
+        <div class="division">
+          <div class="animation-area">
+            <div class="tree"></div>
+            <div class="road"></div>
+            <div class="car"></div>
+            <div class="soldier"></div>
+          </div>
+          <h3>${div}</h3>
+          <div class="stats">
+            <p>আয়: ${d.tax} টাকা</p>
+            <p>সেনাবাহিনী: ${d.army}</p>
+            <p>পুলিশ: ${d.police}</p>
+            <p>ফার্মিং: ${d.farming}</p>
+            <p>বিল্ডিং: ${d.buildings}</p>
+          </div>
+          <button onclick="d.tax+=100;render()">ট্যাক্স বৃদ্ধি</button>
+          <button onclick="d.army+=10;render()">সেনা নিয়োগ</button>
+          <button onclick="d.buildings+=1;render()">বিল্ডিং নির্মাণ</button>
+        </div>
+      `;
+    }
+  }
+  render();
+</script>
+</body>
+</html>
