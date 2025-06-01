@@ -1,13 +1,28 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>দেশ পরিচালনা গেম</title>
+  <link rel="manifest" href="manifest.json" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log("Service Worker Registered"));
+    }
+  </script>
   <style>
-    body { font-family: Arial; text-align: center; background: #eef; padding: 0; margin: 0; }
-    button { padding: 10px; margin: 5px; font-size: 16px; }
-    .stats { margin: 15px; }
+    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(to bottom, #dfefff, #c0e0ff); text-align: center; margin: 0; padding: 20px; }
+    h1 { animation: pulse 2s infinite; }
+    @keyframes pulse {
+      0% { transform: scale(1); color: #003366; }
+      50% { transform: scale(1.05); color: #0055aa; }
+      100% { transform: scale(1); color: #003366; }
+    }
+    button { padding: 12px 20px; margin: 6px; font-size: 16px; border-radius: 8px; border: none; background: #0088cc; color: white; cursor: pointer; transition: background 0.3s; }
+    button:hover { background: #005f99; }
+    .stats, .controls { margin: 20px auto; max-width: 600px; padding: 15px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    input[type="text"] { padding: 10px; width: 200px; border-radius: 5px; border: 1px solid #aaa; }
   </style>
 </head>
 <body>
@@ -19,23 +34,25 @@
     <p>প্রধানমন্ত্রী: <span id="pm">নেই</span></p>
   </div>
 
-  <input type="text" id="divisionNameInput" placeholder="নতুন নাম" />
-  <button onclick="renameDivision()">নাম পরিবর্তন</button><br>
-  <button onclick="recruitArmy()">সেনা নিয়োগ</button>
-  <button onclick="earnMoney()">ট্যাক্স আয়</button>
-  <button onclick="farm()">চাষাবাদ</button><br>
-  <button onclick="nextDivision()">পরবর্তী ডিভিশন</button>
-  <button onclick="electPrimeMinister()">প্রধানমন্ত্রী নির্বাচন</button>
+  <div class="controls">
+    <input type="text" id="divisionNameInput" placeholder="নতুন নাম লিখুন" />
+    <button onclick="renameDivision()">নাম পরিবর্তন</button><br>
+    <button onclick="recruitArmy()">সেনা নিয়োগ</button>
+    <button onclick="earnMoney()">ট্যাক্স আয়</button>
+    <button onclick="farm()">চাষাবাদ</button><br>
+    <button onclick="nextDivision()">পরবর্তী ডিভিশন</button>
+    <button onclick="electPrimeMinister()">প্রধানমন্ত্রী নির্বাচন</button>
+  </div>
 
   <script>
     let divisions = [
-      { name: "ঢাকা", army: 0, money: 1000, food: 100, mp: "" },
-      { name: "চট্টগ্রাম", army: 0, money: 1000, food: 100, mp: "" },
-      { name: "রাজশাহী", army: 0, money: 1000, food: 100, mp: "" },
-      { name: "খুলনা", army: 0, money: 1000, food: 100, mp: "" },
-      { name: "বরিশাল", army: 0, money: 1000, food: 100, mp: "" },
-      { name: "সিলেট", army: 0, money: 1000, food: 100, mp: "" },
-      { name: "রংপুর", army: 0, money: 1000, food: 100, mp: "" }
+      { name: "ঢাকা", army: 0, money: 1000, food: 100 },
+      { name: "চট্টগ্রাম", army: 0, money: 1000, food: 100 },
+      { name: "রাজশাহী", army: 0, money: 1000, food: 100 },
+      { name: "খুলনা", army: 0, money: 1000, food: 100 },
+      { name: "বরিশাল", army: 0, money: 1000, food: 100 },
+      { name: "সিলেট", army: 0, money: 1000, food: 100 },
+      { name: "রংপুর", army: 0, money: 1000, food: 100 }
     ];
     let currentDivision = 0;
     let primeMinister = "";
@@ -57,7 +74,7 @@
         d.food -= 20;
         updateDisplay();
       } else {
-        alert("টাকা বা খাদ্য নেই!");
+        alert("টাকা বা খাদ্য পর্যাপ্ত নয়!");
       }
     }
 
