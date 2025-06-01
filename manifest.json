@@ -1,9 +1,9 @@
-﻿{
+{
   "name": "দেশ পরিচালনা গেম",
   "short_name": "CountryGame",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#004466",
+  "background_color": "#eef",
   "theme_color": "#004466",
   "icons": [
     {

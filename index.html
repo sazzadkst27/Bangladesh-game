@@ -1,117 +1,96 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <title>আমার দেশ</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>দেশ পরিচালনা গেম</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #eef7f2;
-      padding: 20px;
-      text-align: center;
-    }
-
-    h1 {
-      color: #2c5f2d;
-    }
-
-    .stat {
-      background-color: #d4f4dd;
-      padding: 15px;
-      margin: 15px auto;
-      width: 300px;
-      border-radius: 10px;
-    }
-
-    button {
-      padding: 10px 20px;
-      margin: 8px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background-color: #2c5f2d;
-      color: white;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #4caf50;
-    }
-
-    #message {
-      margin-top: 20px;
-      font-weight: bold;
-      color: #333;
-    }
+    body { font-family: Arial; text-align: center; background: #eef; padding: 0; margin: 0; }
+    button { padding: 10px; margin: 5px; font-size: 16px; }
+    .stats { margin: 15px; }
   </style>
 </head>
 <body>
+  <h1>🇧🇩 দেশ পরিচালনা গেম 🇧🇩</h1>
 
-  <h1>🌍 আমার দেশ</h1>
-
-  <div class="stat">
-    <p>💰 বাজেট: <span id="budget">1000</span> কোটি টাকা</p>
-    <p>🌳 পরিবেশ: <span id="environment">50</span>/100</p>
-    <p>🏗️ ভবন সংখ্যা: <span id="buildings">0</span></p>
+  <div class="stats">
+    <p>ডিভিশন: <span id="divisionName">ঢাকা</span></p>
+    <p>সেনা: <span id="army">0</span> | টাকা: <span id="money">1000</span> | খাদ্য: <span id="food">100</span></p>
+    <p>প্রধানমন্ত্রী: <span id="pm">নেই</span></p>
   </div>
 
-  <div>
-    <button onclick="plantTree()">🌱 গাছ লাগান (-৫০)</button>
-    <button onclick="buildBuilding()">🏢 ভবন নির্মাণ (-২০০)</button>
-    <button onclick="collectTax()">💼 কর আদায় (+৩০০)</button>
-  </div>
-
-  <p id="message"></p>
+  <input type="text" id="divisionNameInput" placeholder="নতুন নাম" />
+  <button onclick="renameDivision()">নাম পরিবর্তন</button><br>
+  <button onclick="recruitArmy()">সেনা নিয়োগ</button>
+  <button onclick="earnMoney()">ট্যাক্স আয়</button>
+  <button onclick="farm()">চাষাবাদ</button><br>
+  <button onclick="nextDivision()">পরবর্তী ডিভিশন</button>
+  <button onclick="electPrimeMinister()">প্রধানমন্ত্রী নির্বাচন</button>
 
   <script>
-    let budget = 1000;
-    let environment = 50;
-    let buildings = 0;
+    let divisions = [
+      { name: "ঢাকা", army: 0, money: 1000, food: 100, mp: "" },
+      { name: "চট্টগ্রাম", army: 0, money: 1000, food: 100, mp: "" },
+      { name: "রাজশাহী", army: 0, money: 1000, food: 100, mp: "" },
+      { name: "খুলনা", army: 0, money: 1000, food: 100, mp: "" },
+      { name: "বরিশাল", army: 0, money: 1000, food: 100, mp: "" },
+      { name: "সিলেট", army: 0, money: 1000, food: 100, mp: "" },
+      { name: "রংপুর", army: 0, money: 1000, food: 100, mp: "" }
+    ];
+    let currentDivision = 0;
+    let primeMinister = "";
 
-    const budgetEl = document.getElementById("budget");
-    const environmentEl = document.getElementById("environment");
-    const buildingsEl = document.getElementById("buildings");
-    const messageEl = document.getElementById("message");
-
-    function updateUI() {
-      budgetEl.innerText = budget;
-      environmentEl.innerText = environment;
-      buildingsEl.innerText = buildings;
+    function updateDisplay() {
+      const d = divisions[currentDivision];
+      document.getElementById("divisionName").textContent = d.name;
+      document.getElementById("army").textContent = d.army;
+      document.getElementById("money").textContent = d.money;
+      document.getElementById("food").textContent = d.food;
+      document.getElementById("pm").textContent = primeMinister || "নেই";
     }
 
-    function plantTree() {
-      if (budget >= 50) {
-        budget -= 50;
-        environment += 5;
-        if (environment > 100) environment = 100;
-        messageEl.innerText = "🌳 আপনি গাছ লাগালেন!";
+    function recruitArmy() {
+      let d = divisions[currentDivision];
+      if (d.money >= 200 && d.food >= 20) {
+        d.army++;
+        d.money -= 200;
+        d.food -= 20;
+        updateDisplay();
       } else {
-        messageEl.innerText = "❌ পর্যাপ্ত বাজেট নেই!";
+        alert("টাকা বা খাদ্য নেই!");
       }
-      updateUI();
     }
 
-    function buildBuilding() {
-      if (budget >= 200) {
-        budget -= 200;
-        buildings += 1;
-        environment -= 3;
-        messageEl.innerText = "🏗️ ভবন নির্মাণ সম্পন্ন!";
-      } else {
-        messageEl.innerText = "❌ বাজেট যথেষ্ট নয়!";
+    function earnMoney() {
+      divisions[currentDivision].money += 150;
+      updateDisplay();
+    }
+
+    function farm() {
+      divisions[currentDivision].food += 30;
+      updateDisplay();
+    }
+
+    function renameDivision() {
+      const newName = document.getElementById("divisionNameInput").value;
+      if (newName.trim() !== "") {
+        divisions[currentDivision].name = newName;
+        updateDisplay();
       }
-      updateUI();
     }
 
-    function collectTax() {
-      budget += 300;
-      environment -= 2;
-      messageEl.innerText = "💼 আপনি কর আদায় করলেন।";
-      updateUI();
+    function nextDivision() {
+      currentDivision = (currentDivision + 1) % divisions.length;
+      updateDisplay();
     }
 
-    updateUI();
+    function electPrimeMinister() {
+      primeMinister = divisions[currentDivision].name;
+      updateDisplay();
+      alert(primeMinister + " এখন প্রধানমন্ত্রী!");
+    }
+
+    updateDisplay();
   </script>
-
 </body>
 </html>

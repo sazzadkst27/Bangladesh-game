@@ -1,24 +1,14 @@
-﻿const cacheName = 'country-game-v1';
-const filesToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
-];
+const cacheName = 'country-game-v2';
+const filesToCache = ['/', '/index.html', '/manifest.json'];
 
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(cacheName).then(cache => {
-      return cache.addAll(filesToCache);
-    })
+    caches.open(cacheName).then(cache => cache.addAll(filesToCache))
   );
 });
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
+    caches.match(event.request).then(response => response || fetch(event.request))
   );
 });
