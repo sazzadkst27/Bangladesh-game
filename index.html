@@ -1,113 +1,143 @@
 ﻿<!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>দেশ পরিচালনা গেম</title>
-  <link rel="manifest" href="manifest.json" />
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log("Service Worker Registered"));
-    }
-  </script>
-  <style>
-    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(to bottom, #dfefff, #c0e0ff); text-align: center; margin: 0; padding: 20px; }
-    h1 { animation: pulse 2s infinite; }
-    @keyframes pulse {
-      0% { transform: scale(1); color: #003366; }
-      50% { transform: scale(1.05); color: #0055aa; }
-      100% { transform: scale(1); color: #003366; }
-    }
-    button { padding: 12px 20px; margin: 6px; font-size: 16px; border-radius: 8px; border: none; background: #0088cc; color: white; cursor: pointer; transition: background 0.3s; }
-    button:hover { background: #005f99; }
-    .stats, .controls { margin: 20px auto; max-width: 600px; padding: 15px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    input[type="text"] { padding: 10px; width: 200px; border-radius: 5px; border: 1px solid #aaa; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Natural Animation Demo</title>
+<style>
+  body {
+    margin: 0;
+    background: linear-gradient(to top, #87ceeb 0%, #a2d149 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+  }
+  h1 {
+    text-align: center;
+    margin: 20px 0;
+    color: #154734;
+  }
+  .scene {
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    height: 300px;
+    margin: 0 auto;
+    background: linear-gradient(to top, #7bc950 0%, #b3e676 60%, #87ceeb 100%);
+    border-radius: 15px;
+    box-shadow: 0 0 15px #2d5a1e88;
+    overflow: hidden;
+  }
+
+  /* Tree */
+  .tree {
+    position: absolute;
+    bottom: 20px;
+    left: 50px;
+    width: 50px;
+    height: 120px;
+    background: linear-gradient(to top, #3a5a15 0%, #6aa84f 100%);
+    border-radius: 30px 30px 10px 10px;
+    animation: sway 4s ease-in-out infinite;
+    box-shadow: inset 0 10px 20px #4a6e1f;
+  }
+  .tree::before {
+    content: "";
+    position: absolute;
+    bottom: 110px;
+    left: -30px;
+    width: 110px;
+    height: 110px;
+    background: radial-gradient(circle at center, #2d5a1e 60%, transparent 80%);
+    border-radius: 50%;
+    animation: sway 4s ease-in-out infinite;
+    animation-delay: 1s;
+  }
+
+  @keyframes sway {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(4deg); }
+  }
+
+  /* Road */
+  .road {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: repeating-linear-gradient(
+      to right,
+      #444, #444 30px,
+      #bbb 30px, #bbb 50px
+    );
+  }
+
+  /* Car */
+  .car {
+    position: absolute;
+    bottom: 10px;
+    width: 60px;
+    height: 30px;
+    background: #e53935;
+    border-radius: 10px 10px 5px 5px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+    animation: drive 7s linear infinite;
+  }
+  .car::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 10px;
+    width: 10px;
+    height: 10px;
+    background: #ffeb3b;
+    border-radius: 50%;
+    box-shadow: 35px 0 #ffeb3b;
+  }
+  @keyframes drive {
+    0% { left: -70px; }
+    100% { left: 100%; }
+  }
+
+  /* Soldier */
+  .soldier {
+    position: absolute;
+    bottom: 40px;
+    left: 200px;
+    width: 35px;
+    height: 80px;
+    background: linear-gradient(to top, #4d4d4d 0%, #698e25 100%);
+    border-radius: 10px;
+    box-shadow: inset 0 0 15px #496622;
+    animation: march 4s ease-in-out infinite;
+  }
+  .soldier::before {
+    content: "";
+    position: absolute;
+    bottom: 75px;
+    left: 6px;
+    width: 23px;
+    height: 23px;
+    background: #f9ddb7;
+    border-radius: 50%;
+    border: 2px solid #554433;
+  }
+  @keyframes march {
+    0%, 100% { left: 200px; }
+    50% { left: 220px; }
+  }
+</style>
 </head>
 <body>
-  <h1>🇧🇩 দেশ পরিচালনা গেম 🇧🇩</h1>
 
-  <div class="stats">
-    <p>ডিভিশন: <span id="divisionName">ঢাকা</span></p>
-    <p>সেনা: <span id="army">0</span> | টাকা: <span id="money">1000</span> | খাদ্য: <span id="food">100</span></p>
-    <p>প্রধানমন্ত্রী: <span id="pm">নেই</span></p>
-  </div>
+<h1>বাংলাদেশ গেম - Natural Animation Demo</h1>
 
-  <div class="controls">
-    <input type="text" id="divisionNameInput" placeholder="নতুন নাম লিখুন" />
-    <button onclick="renameDivision()">নাম পরিবর্তন</button><br>
-    <button onclick="recruitArmy()">সেনা নিয়োগ</button>
-    <button onclick="earnMoney()">ট্যাক্স আয়</button>
-    <button onclick="farm()">চাষাবাদ</button><br>
-    <button onclick="nextDivision()">পরবর্তী ডিভিশন</button>
-    <button onclick="electPrimeMinister()">প্রধানমন্ত্রী নির্বাচন</button>
-  </div>
+<div class="scene">
+  <div class="tree"></div>
+  <div class="road"></div>
+  <div class="car"></div>
+  <div class="soldier"></div>
+</div>
 
-  <script>
-    let divisions = [
-      { name: "ঢাকা", army: 0, money: 1000, food: 100 },
-      { name: "চট্টগ্রাম", army: 0, money: 1000, food: 100 },
-      { name: "রাজশাহী", army: 0, money: 1000, food: 100 },
-      { name: "খুলনা", army: 0, money: 1000, food: 100 },
-      { name: "বরিশাল", army: 0, money: 1000, food: 100 },
-      { name: "সিলেট", army: 0, money: 1000, food: 100 },
-      { name: "রংপুর", army: 0, money: 1000, food: 100 }
-    ];
-    let currentDivision = 0;
-    let primeMinister = "";
-
-    function updateDisplay() {
-      const d = divisions[currentDivision];
-      document.getElementById("divisionName").textContent = d.name;
-      document.getElementById("army").textContent = d.army;
-      document.getElementById("money").textContent = d.money;
-      document.getElementById("food").textContent = d.food;
-      document.getElementById("pm").textContent = primeMinister || "নেই";
-    }
-
-    function recruitArmy() {
-      let d = divisions[currentDivision];
-      if (d.money >= 200 && d.food >= 20) {
-        d.army++;
-        d.money -= 200;
-        d.food -= 20;
-        updateDisplay();
-      } else {
-        alert("টাকা বা খাদ্য পর্যাপ্ত নয়!");
-      }
-    }
-
-    function earnMoney() {
-      divisions[currentDivision].money += 150;
-      updateDisplay();
-    }
-
-    function farm() {
-      divisions[currentDivision].food += 30;
-      updateDisplay();
-    }
-
-    function renameDivision() {
-      const newName = document.getElementById("divisionNameInput").value;
-      if (newName.trim() !== "") {
-        divisions[currentDivision].name = newName;
-        updateDisplay();
-      }
-    }
-
-    function nextDivision() {
-      currentDivision = (currentDivision + 1) % divisions.length;
-      updateDisplay();
-    }
-
-    function electPrimeMinister() {
-      primeMinister = divisions[currentDivision].name;
-      updateDisplay();
-      alert(primeMinister + " এখন প্রধানমন্ত্রী!");
-    }
-
-    updateDisplay();
-  </script>
 </body>
 </html>
